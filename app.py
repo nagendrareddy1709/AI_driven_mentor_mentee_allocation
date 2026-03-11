@@ -62,6 +62,27 @@ def initialize_files():
 def load_data():
 
     mentors_df = pd.read_csv(MENTORS_FILE)
+    
+    required_mentor_cols = [
+    "mentor_name",
+    "email",
+    "specializations",
+    "assigned_count",
+    "avg_rating",
+    "total_ratings"
+]
+
+for col in required_mentor_cols:
+    if col not in mentors_df.columns:
+        if col == "assigned_count":
+            mentors_df[col] = 0
+        elif col == "avg_rating":
+            mentors_df[col] = DEFAULT_RATING
+        elif col == "total_ratings":
+            mentors_df[col] = 0
+        else:
+            mentors_df[col] = ""
+            
     mentees_df = pd.read_csv(MENTEES_FILE)
 
     required_cols = [
@@ -150,8 +171,8 @@ def compute_best_mentor(mentee_course, mentors_df):
 
     for idx, sim in enumerate(similarity):
 
-        assigned = mentors_df.loc[idx,"assigned_count"]
-        rating = mentors_df.loc[idx,"avg_rating"]
+        assigned = mentors_df.iloc[idx].get("assigned_count",0)
+        rating = mentors_df.iloc[idx].get("avg_rating",DEFAULT_RATING)
 
         if pd.isna(rating):
             rating = DEFAULT_RATING
@@ -557,4 +578,5 @@ if st.button("Reset Entire System (Demo Only)"):
             os.remove(f)
 
     st.success("System Reset Completed")
+
     st.rerun()
