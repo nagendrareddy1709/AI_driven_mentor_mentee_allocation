@@ -538,7 +538,7 @@ if not mentors_df.empty:
 
     ax.set_xlim(0, max_count + 1)
     ax.set_xticks(range(0, max_count + 5, 1))
-    ax.grid(axis="x", linestyle="--", alpha=0.6)
+    # ax.grid(axis="x", linestyle="--", alpha=0.6)
 
     # add padding for axis labels
     ax.set_xlabel("Number of Mentees Assigned", fontsize=18, labelpad=15)  # ↑ space from x-axis ticks
@@ -581,5 +581,6 @@ if st.button("Reset Entire System (Demo Only)"):
     st.success("System Reset Completed")
 
     st.rerun()
+
 
 
