@@ -523,14 +523,14 @@ if not mentors_df.empty:
     chart_df = chart_df.sort_values(by="assigned_count", ascending=False)
 
     num_mentors = len(chart_df)
-    fig_height = max(6, num_mentors * 0.7)
+    fig_height = max(1.5, num_mentors * 0.2)
 
     fig, ax = plt.subplots(figsize=(12, fig_height), constrained_layout=True)
 
     bars = ax.barh(
         chart_df["mentor_name"],
         chart_df["assigned_count"],
-        height=0.6
+        height=0.25
     )
     ax.invert_yaxis()
     ax.margins(y=0.005)
@@ -581,4 +581,5 @@ if st.button("Reset Entire System (Demo Only)"):
     st.success("System Reset Completed")
 
     st.rerun()
+
 
