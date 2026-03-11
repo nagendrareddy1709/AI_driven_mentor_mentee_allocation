@@ -31,6 +31,17 @@ def normalize(text):
         return ""
     return str(text).strip().lower()
 
+
+# ======================================================
+# DATAFRAME STRUCTURE VALIDATION
+# ======================================================
+
+def ensure_columns(df, columns_defaults):
+    for col, default in columns_defaults.items():
+        if col not in df.columns:
+            df[col] = default
+    return df
+
 # ======================================================
 # INITIALIZE FILES
 # ======================================================
@@ -61,27 +72,17 @@ def initialize_files():
 
 def load_data():
 
-    mentors_df = pd.read_csv(MENTORS_FILE)
-    
-    required_mentor_cols = [
-    "mentor_name",
-    "email",
-    "specializations",
-    "assigned_count",
-    "avg_rating",
-    "total_ratings"
-]
+    mentors_df = pd.read_csv(MENTORS_FILE) 
 
-for col in required_mentor_cols:
-    if col not in mentors_df.columns:
-        if col == "assigned_count":
-            mentors_df[col] = 0
-        elif col == "avg_rating":
-            mentors_df[col] = DEFAULT_RATING
-        elif col == "total_ratings":
-            mentors_df[col] = 0
-        else:
-            mentors_df[col] = ""
+    # ensure mentor columns exist
+    mentors_df = ensure_columns(mentors_df,{
+        "mentor_name":"",
+        "email":"",
+        "specializations":"",
+        "assigned_count":0,
+        "avg_rating":DEFAULT_RATING,
+        "total_ratings":0
+    })
             
     mentees_df = pd.read_csv(MENTEES_FILE)
 
@@ -580,3 +581,4 @@ if st.button("Reset Entire System (Demo Only)"):
     st.success("System Reset Completed")
 
     st.rerun()
+
